@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
@@ -20,6 +21,7 @@ public class Controller extends HttpServlet {
 	
 	private String descricaoVideo;
 	private String nomeArquivoVideo;
+	private String errorMessage;
   
 	/**
 	 * Referência para upload de arquivos:
@@ -37,21 +39,18 @@ public class Controller extends HttpServlet {
 	    this.nomeArquivoVideo = this.getFilename(filePart);
 	    
 	    //Processando arquivo
-	    if(this.nomeArquivoVideo == null){
-	    	/**
-	    	 * TODO: voltar para index e exibir mensagem de erro: falta arquivo de vídeo. 
-	    	 */
+	    if(this.nomeArquivoVideo == null || this.nomeArquivoVideo.equals("")){
+	    	this.haddlerError(request, response, "Você deve especificar um arquivo a convertido");
+	    	return;
 	    }
 	    if(! fileUtils.writeOriginalFile(filePart.getInputStream(), this.nomeArquivoVideo)){
-	    	/**
-	    	 * TODO: Enviar para tela de erro e informa problemas na gravação do arquivo no servidor. 
-	    	 */
+	    	this.haddlerError(request, response, "Ocorreu um erro ao manipular o arquivo enviado no servidor de conversão.");
+	    	return;
 	    }
 	    
 	    if(! videoUtils.convertVideoFile(this.nomeArquivoVideo)){
-	    	/**
-	    	 * TODO: Enviar para tela de erro e informar problemas na conversão do arquivo. 
-	    	 */
+	    	this.haddlerError(request, response, "Ocorreu um erro ao manipular o arquivo enviado no servidor de conversão.");
+	    	return;
 	    }
 	    
 	    /**
@@ -75,5 +74,17 @@ public class Controller extends HttpServlet {
 	        }
 	    }
 	    return null;
+	}
+	
+	private void haddlerError (HttpServletRequest request, HttpServletResponse response, String msg){
+    	request.setAttribute("errormsg", msg);
+	    RequestDispatcher disp = request.getRequestDispatcher("index.jsp");
+    	try {
+			disp.forward(request, response);
+		} catch (ServletException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

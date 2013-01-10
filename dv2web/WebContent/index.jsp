@@ -7,6 +7,11 @@
 <title>DV 2 WEB - Converta seu vídeo para a WEB</title>
 </head>
 <body>
+	<p>
+		<h1>
+			${errormsg}
+		</h1>
+	</p>
 	<!-- form method=POST action="Controller" enctype="multipart/form-data"-->
 	<form action="Controller" method="post" enctype="multipart/form-data">
 		<p>
@@ -21,6 +26,5 @@
 			<input type="submit" value="Converter">
 		</p>
 	</form>
-
 </body>
 </html>
