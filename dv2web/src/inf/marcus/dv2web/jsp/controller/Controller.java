@@ -1,4 +1,9 @@
 package inf.marcus.dv2web.jsp.controller;
+import inf.marcus.dv2web.jsp.business.VideoUtils;
+import inf.marcus.dv2web.jsp.business.FileUtils;
+
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -22,19 +27,39 @@ public class Controller extends HttpServlet {
 	 */
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//Obtendo a descrição do arquivo de vídeo.
+		FileUtils fileUtils = new FileUtils();
+		VideoUtils videoUtils = new VideoUtils();
+
+		//Obtendo dados submetidos no formulário.
 		this.descricaoVideo = request.getParameter("videoname");
-		
 		//Obtendo o arquivo de vídeo.
 	    Part filePart = request.getPart("videofile"); // Recupera <input type="file" name="videofile">
-	    this.nomeArquivoVideo = getFilename(filePart);
+	    this.nomeArquivoVideo = this.getFilename(filePart);
+	    
+	    //Processando arquivo
 	    if(this.nomeArquivoVideo == null){
-	    	//voltar para index e exibir mensagem de erro: falta arquivo de vídeo.
+	    	/**
+	    	 * TODO: voltar para index e exibir mensagem de erro: falta arquivo de vídeo. 
+	    	 */
 	    }
-	    InputStream filecontent = filePart.getInputStream();
+	    if(! fileUtils.writeOriginalFile(filePart.getInputStream(), this.nomeArquivoVideo)){
+	    	/**
+	    	 * TODO: Enviar para tela de erro e informa problemas na gravação do arquivo no servidor. 
+	    	 */
+	    }
+	    
+	    if(! videoUtils.convertVideoFile(this.nomeArquivoVideo)){
+	    	/**
+	    	 * TODO: Enviar para tela de erro e informar problemas na conversão do arquivo. 
+	    	 */
+	    }
+	    
 	    /**
-	     * TODO: gravar o arquivo em disco e preparar para recodificação. 
+	     * Apresentar o video convertido.
+	     * <EMBED src="file.avi" loop="1" height="480" width="640" autostart="true" />
 	     */
+	    videoUtils.streamVideo(this.nomeArquivoVideo);
+	    
 	}
 	
 	/**
@@ -42,7 +67,7 @@ public class Controller extends HttpServlet {
 	 * @param part Objeto contendo o cabeçalho da requisição.
 	 * @return O nome do Arquivo.
 	 */
-	private static String getFilename(Part part) {
+	private String getFilename(Part part) {
 	    for (String cd : part.getHeader("content-disposition").split(";")) {
 	        if (cd.trim().startsWith("filename")) {
 	            String filename = cd.substring(cd.indexOf('=') + 1).trim().replace("\"", "");
