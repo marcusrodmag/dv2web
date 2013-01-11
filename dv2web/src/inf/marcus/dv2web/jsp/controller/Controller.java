@@ -40,7 +40,7 @@ public class Controller extends HttpServlet {
 	    
 	    //Processando arquivo
 	    if(this.nomeArquivoVideo == null || this.nomeArquivoVideo.equals("")){
-	    	this.haddlerError(request, response, "Você deve especificar um arquivo a convertido");
+	    	this.haddlerError(request, response, "Você deve especificar um arquivo a ser convertido");
 	    	return;
 	    }
 	    if(! fileUtils.writeOriginalFile(filePart.getInputStream(), this.nomeArquivoVideo)){
