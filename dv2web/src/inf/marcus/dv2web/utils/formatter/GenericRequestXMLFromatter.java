@@ -4,8 +4,6 @@ import inf.marcus.dv2web.utils.business.encoder.MediaConverterRequester;
 
 import java.io.IOException;
 
-import sun.awt.windows.ThemeReader;
-
 public abstract class GenericRequestXMLFromatter {
 	
 	/** Usuário para o request. */

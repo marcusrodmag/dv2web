@@ -2,11 +2,7 @@ package inf.marcus.dv2web.web.controller;
 import inf.marcus.dv2web.web.business.FileUtils;
 import inf.marcus.dv2web.web.business.VideoUtils;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;

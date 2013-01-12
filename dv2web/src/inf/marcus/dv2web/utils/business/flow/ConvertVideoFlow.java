@@ -3,7 +3,6 @@ package inf.marcus.dv2web.utils.business.flow;
 import inf.marcus.dv2web.utils.business.encoder.AddMedia;
 import inf.marcus.dv2web.utils.business.encoder.MediaInformation;
 import inf.marcus.dv2web.utils.business.encoder.ProcessMedia;
-import inf.marcus.dv2web.web.business.AmazonWSS3;
 
 import java.io.IOException;
 
@@ -21,8 +20,7 @@ public class ConvertVideoFlow {
 	}
 
 	public void execute() {
-		AmazonWSS3 awsInfo = new AmazonWSS3(this.videoFileName);
-		AddMedia addMedia = new AddMedia(awsInfo.getMediaSourceURL(), awsInfo.getMediaDestinationURL());
+		AddMedia addMedia = new AddMedia(this.videoFileName);
 		try {
 			addMedia.execute();
 		} catch (IOException e) {

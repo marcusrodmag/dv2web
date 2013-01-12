@@ -1,6 +1,7 @@
 package inf.marcus.dv2web.utils.formatter;
 
 
+
 public abstract class EncodingCOMXMLFormatter extends GenericRequestXMLFromatter {
 	/** Endereço para o request. */
 	public static final String encoderRequestURL = "http://manage.encoding.com";
@@ -22,7 +23,7 @@ public abstract class EncodingCOMXMLFormatter extends GenericRequestXMLFromatter
 		this.xmlBuild("<userid>" + super.getUserID() + "</userid>");
 		this.xmlBuild("<userkey>" + super.getPassword() + "</userkey>");
 	}
-
+	
 	@Override
 	protected void createXMLFooter() {
 		this.xmlBuild("</query>");

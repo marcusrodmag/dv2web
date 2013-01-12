@@ -1,11 +1,11 @@
 package inf.marcus.dv2web.utils.business.encoder;
 
+import inf.marcus.dv2web.utils.constants.ConstantsAWS;
 import inf.marcus.dv2web.utils.formatter.EncodingCOMXMLFormatter;
 
 public class AddMedia extends EncodingCOMXMLFormatter {
 	
-	private String sourceMedia;
-	private String destinationMediaURL;
+	private String fileName;
     private final String successResponseStartTag = "<response><message>Added</message><MediaID>";
     private final String successResponseEndTag = "</MediaID></response>";
 	
@@ -14,17 +14,16 @@ public class AddMedia extends EncodingCOMXMLFormatter {
      * @param sourceMedia Arquivo de entrada.
      * @param destinationMediaURL Arquivo de saída.
      */
-	public AddMedia(String sourceMedia, String destinationMediaURL){
-		this.sourceMedia = sourceMedia;
-		this.destinationMediaURL = destinationMediaURL;
+	public AddMedia(String fileName){
+		this.fileName = fileName;
 	}
 
 	@Override
 	public void createXMLBody() {
 		super.xmlBuild("<action>AddMediaBenchmark</action>");
-		super.xmlBuild("<source>" + this.sourceMedia + "</source>");
+		super.xmlBuild("<source>" + this.getMediaSourceURL() + "</source>");
 		super.xmlBuild("<format>");
-		super.xmlBuild("<destination>" + this.destinationMediaURL + "</destination>");
+		super.xmlBuild("<destination>" + this.getMediaDestinationURL() + "</destination>");
 		super.xmlBuild("<output>mp4</output>");
 		super.xmlBuild("<video_codec>mpeg4</video_codec>");
 		super.xmlBuild("<audio_codec>libfaac</audio_codec>");
@@ -54,6 +53,18 @@ public class AddMedia extends EncodingCOMXMLFormatter {
 	    int start = super.getResponse().indexOf(successResponseStartTag) + successResponseStartTag.length();
 	    int end = super.getResponse().indexOf(successResponseEndTag);
 	    return Integer.parseInt(super.getResponse().substring(start, end));
+	}
+	
+	private String getMediaDestinationURL() {
+//		return "http://"+AmazonWSS3.AWS_S3_KEY + ":" + AmazonWSS3.AWS_S3_SECRET_ENCODED + "@" + AWS_S3_BUCKET_NAME + ".s3.amazonaws.com/" + AWS_S3_BUCKET_ENCODED_SUBDIR + "/" + filename + "?acl=public-read";
+		return "http://"+ConstantsAWS.AWS_S3_BUCKET_NAME+".s3.amazonaws.com/"+ConstantsAWS.AWS_S3_BUCKET_ENCODED_SUBDIR+"/converted_"+this.fileName+"?acl=public-read";
+	}
+	
+	private String getMediaSourceURL() {
+//		return "http://" + AmazonWSS3.AWS_S3_KEY + ":" + AmazonWSS3.AWS_S3_SECRET + "@" + AmazonWSS3.AWS_S3_BUCKET_NAME + ".s3.amazonaws.com/" + AmazonWSS3.AWS_S3_BUCKET_ORIGINAL_SUBDIR + "/" + filename;
+//		return "http://" + AmazonWSS3.AWS_S3_KEY + ":" + AmazonWSS3.AWS_S3_SECRET + "@" + AmazonWSS3.AWS_S3_BUCKET_NAME + ".s3.amazonaws.com/" + filename;
+//		return "http://" + AmazonWSS3.AWS_S3_KEY + ":" + AmazonWSS3.AWS_S3_SECRET_ENCODED + "@" + AmazonWSS3.AWS_S3_BUCKET_NAME + ".s3.amazonaws.com/" + filename;
+		return "http://"+ConstantsAWS.AWS_S3_BUCKET_NAME+".s3.amazonaws.com/" + ConstantsAWS.AWS_S3_BUCKET_ORIGINAL_SUBDIR + "/" + this.fileName;
 	}
 
 }
