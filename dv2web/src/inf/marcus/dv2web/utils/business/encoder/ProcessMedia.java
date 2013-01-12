@@ -9,7 +9,6 @@ public class ProcessMedia extends EncodingCOMXMLFormatter {
 		this.mediaID = mediaID;
 	}
 	
-	
 	@Override
 	public void createXMLBody() {
 		super.xmlBuild("<action>ProcessMedia</action>");
@@ -18,7 +17,10 @@ public class ProcessMedia extends EncodingCOMXMLFormatter {
 
 	@Override
 	public boolean isValidResponse() {
-		// TODO Auto-generated method stub
+		if(super.getResponse() != null){
+			// TODO: qual o response esperado pelo ProcessMedia?
+			return super.getResponse().contains("<response>");
+		}
 		return false;
 	}
 

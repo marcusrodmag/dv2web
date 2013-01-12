@@ -9,7 +9,6 @@ public class MediaInformation extends EncodingCOMXMLFormatter {
 	private String bitrate;
 	private String duration;
 	private String videoCodec;
-	private String videoBitrate;
 	private String size;
 	private String audioCodec;
 	private String audioChannels;
@@ -42,8 +41,10 @@ public class MediaInformation extends EncodingCOMXMLFormatter {
 
 	@Override
 	public boolean isValidResponse() {
-		// TODO Auto-generated method stub
-		return true;
+		if(super.getResponse() != null){
+			return super.getResponse().contains("<response><bitrate>");
+		}
+		return false;
 	}
 	
 	@Override
@@ -54,13 +55,12 @@ public class MediaInformation extends EncodingCOMXMLFormatter {
 		}
 		this.parserResponse();
 		StringBuilder strBuilder = new StringBuilder();
-		strBuilder.append("\nInformações sobre formato da midia  #" + mediaID);
+		strBuilder.append("\nInformações sobre formato da midia em processamento  #" + mediaID);
 		strBuilder.append("\n\tBitrate: " + this.getBitrate());
 		strBuilder.append("\n\tDuração: " + this.getDuration());
 		strBuilder.append("\n\tTamanho: " + this.getSize());
 			
 		strBuilder.append("\n\tCodec de Vídeo: " + this.getVideoCodec());
-		strBuilder.append("\n\tBitrate de Vídeo: " + this.getVideoBitrate());
 		strBuilder.append("\n\tCodec de Áudio: " + this.getAudioCodec());
 		strBuilder.append("\n\tCanais de áudio: " + this.getAudioChannels());
 		return strBuilder.toString();
@@ -71,7 +71,6 @@ public class MediaInformation extends EncodingCOMXMLFormatter {
 		this.setBitrate(parser.getValue("bitrate"));
 		this.setDuration(parser.getValue("duration"));
 		this.setVideoCodec(parser.getValue("video_codec"));
-		this.setVideoBitrate(parser.getValue("video_bitrate"));
 		this.setSize(parser.getValue("size"));
 		this.setAudioCodec(parser.getValue("audio_codec"));
 		this.setAudioChannels(parser.getValue("audio_channels"));
@@ -102,16 +101,6 @@ public class MediaInformation extends EncodingCOMXMLFormatter {
 
 	public void setVideoCodec(String videoCodec) {
 		this.videoCodec = videoCodec;
-	}
-
-
-	public String getVideoBitrate() {
-		return videoBitrate;
-	}
-
-
-	public void setVideoBitrate(String videoBitrate) {
-		this.videoBitrate = videoBitrate;
 	}
 
 

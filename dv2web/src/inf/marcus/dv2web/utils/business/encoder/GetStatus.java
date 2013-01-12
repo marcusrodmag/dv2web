@@ -21,15 +21,17 @@ public class GetStatus extends EncodingCOMXMLFormatter {
 
 	@Override
 	public boolean isValidResponse() {
-		if(this.getResponse().contains(successResponseStartTag) && this.getResponse().contains(successResponseStartTag)){
-			return true;
+		if(this.getResponse()!=null){
+			if(this.getResponse().contains(successResponseStartTag) && this.getResponse().contains(successResponseStartTag)){
+				return true;
+			}
 		}
 		return false;
 	}
 	
 	public String getStatus(){
 		if(!this.isValidResponse()){
-			return null;
+			return "";
 		}
 		System.out.println("Verificando status de transferência entre AWS e encoding.com");
 	    int start = super.getResponse().indexOf(successResponseStartTag) + successResponseStartTag.length();

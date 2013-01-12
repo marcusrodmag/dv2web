@@ -8,7 +8,7 @@ public class ParserResponse {
 	
 	public String getValue(String fieldName){
 		if(!response.contains(fieldName)){
-			System.err.println("O campo não foi encontrado no response.");
+			System.err.println("O campo não foi encontrado no response: " + fieldName);
 			return "";
 		}
 		String openTag = "<"+fieldName+">";

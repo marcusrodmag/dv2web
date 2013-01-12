@@ -17,11 +17,11 @@ public final class AmazonWSS3 {
 //		return "http://" + AmazonWSS3.AWS_S3_KEY + ":" + AmazonWSS3.AWS_S3_SECRET + "@" + AmazonWSS3.AWS_S3_BUCKET_NAME + ".s3.amazonaws.com/" + AmazonWSS3.AWS_S3_BUCKET_ORIGINAL_SUBDIR + "/" + filename;
 //		return "http://" + AmazonWSS3.AWS_S3_KEY + ":" + AmazonWSS3.AWS_S3_SECRET + "@" + AmazonWSS3.AWS_S3_BUCKET_NAME + ".s3.amazonaws.com/" + filename;
 //		return "http://" + AmazonWSS3.AWS_S3_KEY + ":" + AmazonWSS3.AWS_S3_SECRET_ENCODED + "@" + AmazonWSS3.AWS_S3_BUCKET_NAME + ".s3.amazonaws.com/" + filename;
-		return "http://"+AmazonWSS3.AWS_S3_BUCKET_NAME+".s3.amazonaws.com/" + filename;
+		return "http://"+AmazonWSS3.AWS_S3_BUCKET_NAME+".s3.amazonaws.com/" + AWS_S3_BUCKET_ORIGINAL_SUBDIR + "/" + filename;
 	}
 	
 	public String getMediaDestinationURL() {
 //		return "http://"+AmazonWSS3.AWS_S3_KEY + ":" + AmazonWSS3.AWS_S3_SECRET_ENCODED + "@" + AWS_S3_BUCKET_NAME + ".s3.amazonaws.com/" + AWS_S3_BUCKET_ENCODED_SUBDIR + "/" + filename + "?acl=public-read";
-		return "http://"+AWS_S3_BUCKET_NAME+".s3.amazonaws.com/converted_"+filename+"?acl=public-read";
+		return "http://"+AWS_S3_BUCKET_NAME+".s3.amazonaws.com/"+AWS_S3_BUCKET_ENCODED_SUBDIR+"/converted_"+filename+"?acl=public-read";
 	}
 }

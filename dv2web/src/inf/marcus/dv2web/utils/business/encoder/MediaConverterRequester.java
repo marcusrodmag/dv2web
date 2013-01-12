@@ -12,10 +12,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
-public class EncodingRequester {
+public class MediaConverterRequester {
 	
 	/** Nenhum contrutor padrão. */
-	private EncodingRequester(){}
+	private MediaConverterRequester(){}
 	/**
 	 * Envia uma requisição para o serviço de conversão de vídeo e retorna o resultado no formato XML.
 	 * @param requestURL Endereço para request.
@@ -24,6 +24,8 @@ public class EncodingRequester {
 	 * @throws IOException caso ocorra algum problema na transação entre os servidores de arquivo e conversão.
 	 */
 	public static String executeQuery(String xml) throws IOException {
+		System.out.println();
+		System.out.println("====================================================");
 		URL encoderURL;
 		try {
 			encoderURL = new URL(EncodingCOMXMLFormatter.encoderRequestURL);
@@ -40,7 +42,7 @@ public class EncodingRequester {
 			return null;
 		}
 		System.out.println();
-		System.out.println("REQUEST ====================================================");
+		System.out.println("REQUEST >>");
 		System.out.println(xml);
 		System.out.println();
 		
@@ -67,9 +69,10 @@ public class EncodingRequester {
 		}
 		is.close();
 		System.out.println();
-		System.out.println("RESPONSE ====================================================");
+		System.out.println("RESPONSE >>");
 		System.out.println(strbuf.toString());
 		System.out.println();
+		System.out.println("====================================================");
 		return strbuf.toString();
 
 	}
