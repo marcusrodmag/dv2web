@@ -3,7 +3,7 @@
   <display-name>dv2web_</display-name>
   <servlet>
     <servlet-name>ControllerServlet</servlet-name>
-    <servlet-class>inf.marcus.dv2web.jsp.controller.Controller</servlet-class>
+    <servlet-class>inf.marcus.dv2web.web.controller.Controller</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>ControllerServlet</servlet-name>

@@ -1,4 +1,4 @@
-package inf.marcus.dv2web.jsp.business;
+package inf.marcus.dv2web.web.business;
 
 import java.io.File;
 import java.io.FileNotFoundException;

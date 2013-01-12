@@ -1,4 +1,4 @@
-package inf.marcus.dv2web.jsp.business;
+package inf.marcus.dv2web.web.business;
 
 public final class AmazonWSS3 {
 	private String filename;
@@ -21,6 +21,7 @@ public final class AmazonWSS3 {
 	}
 	
 	public String getMediaDestinationURL() {
-		return "http://"+AmazonWSS3.AWS_S3_KEY + ":" + AmazonWSS3.AWS_S3_SECRET_ENCODED + "@" + AWS_S3_BUCKET_NAME + ".s3.amazonaws.com/" + AWS_S3_BUCKET_ENCODED_SUBDIR + "/" + filename + "?acl=public-read";
+//		return "http://"+AmazonWSS3.AWS_S3_KEY + ":" + AmazonWSS3.AWS_S3_SECRET_ENCODED + "@" + AWS_S3_BUCKET_NAME + ".s3.amazonaws.com/" + AWS_S3_BUCKET_ENCODED_SUBDIR + "/" + filename + "?acl=public-read";
+		return "http://"+AWS_S3_BUCKET_NAME+".s3.amazonaws.com/converted_"+filename+"?acl=public-read";
 	}
 }

@@ -1,6 +1,6 @@
-package inf.marcus.dv2web.jsp.controller;
-import inf.marcus.dv2web.jsp.business.VideoUtils;
-import inf.marcus.dv2web.jsp.business.FileUtils;
+package inf.marcus.dv2web.web.controller;
+import inf.marcus.dv2web.web.business.FileUtils;
+import inf.marcus.dv2web.web.business.VideoUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
