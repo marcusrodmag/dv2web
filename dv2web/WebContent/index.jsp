@@ -8,6 +8,9 @@
 </head>
 <body>
 	<p>
+	<img alt="DV2WEB" src="style/img/logo.png">
+	</p>
+	<p>
 		<h1>
 			${errormsg}
 		</h1>
@@ -17,10 +20,6 @@
 		<p>
 			Informe o arquivo de vídeo a ser convertido:</br>
 			<input type="file" name="videofile" size="20">
-		</p>
-		<p>
-			Qual o nome deste vídeo?</br>
-			<input type="text" name="videoname" size="30">
 		</p>
 		<p>
 			<input type="submit" value="Converter">

@@ -4,9 +4,15 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Reproduzir Vídeo</title>
+<title>DV 2 WEB - Reprodução de Vídeo</title>
 </head>
 <body>
-Exibição de um vídeo convertido
+	<p>
+	<img alt="DV2WEB" src="style/img/logo.png">
+	</p>
+	<p>
+		Exibição de seu vídeo convertido para o Padrão WEB
+	</p>
+	<EMBED src="${videosrc}" loop="1" width="640" height="480" autostart="true" />
 </body>
 </html>

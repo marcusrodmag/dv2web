@@ -1,7 +1,10 @@
 package inf.marcus.dv2web.web.controller;
-import inf.marcus.dv2web.web.business.FileUtils;
-import inf.marcus.dv2web.web.business.VideoUtils;
+import inf.marcus.dv2web.utils.business.flow.VideoConverterFlow;
+import inf.marcus.dv2web.utils.business.storage.MediaStore;
+import inf.marcus.dv2web.utils.constants.ConstantsAWS;
+import inf.marcus.dv2web.web.business.DV2WEBFileUtils;
 
+import java.io.File;
 import java.io.IOException;
 
 import javax.servlet.RequestDispatcher;
@@ -15,8 +18,7 @@ import javax.servlet.http.Part;
 @MultipartConfig
 public class Controller extends HttpServlet {
 	
-	private String descricaoVideo;
-	private String nomeArquivoVideo;
+	private String sendFileName;
 	private String errorMessage;
   
 	/**
@@ -25,36 +27,67 @@ public class Controller extends HttpServlet {
 	 */
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		FileUtils fileUtils = new FileUtils();
-		VideoUtils videoUtils = new VideoUtils();
 
-		//Obtendo dados submetidos no formulário.
-		this.descricaoVideo = request.getParameter("videoname");
 		//Obtendo o arquivo de vídeo.
-	    Part filePart = request.getPart("videofile"); // Recupera <input type="file" name="videofile">
-	    this.nomeArquivoVideo = this.getFilename(filePart);
+		// Recupera <input type="file" name="videofile">
+		Part filePart = request.getPart("videofile");
+	    this.sendFileName = this.getFilename(filePart);
 	    
 	    //Processando arquivo
-	    if(this.nomeArquivoVideo == null || this.nomeArquivoVideo.equals("")){
+	    if(this.sendFileName == null || this.sendFileName.equals("")){
 	    	this.haddlerError(request, response, "Você deve especificar um arquivo a ser convertido");
 	    	return;
 	    }
-	    if(! fileUtils.writeOriginalFile(filePart.getInputStream(), this.nomeArquivoVideo)){
-	    	this.haddlerError(request, response, "Ocorreu um erro ao manipular o arquivo enviado no servidor de conversão.");
-	    	return;
+	    DV2WEBFileUtils fileUtils = new DV2WEBFileUtils(this.sendFileName);
+	    try{
+	    	fileUtils.storeTemporaryFile(filePart.getInputStream());
+	    } catch ( IOException e){
+	    	this.haddlerError(request, response, "Ocorreu um erro ao gravar o arquivo no servidor da aplicação.");
 	    }
 	    
-	    if(! videoUtils.convertVideoFile(this.nomeArquivoVideo)){
-	    	this.haddlerError(request, response, "Ocorreu um erro ao manipular o arquivo enviado no servidor de conversão.");
-	    	return;
+	    // Enviando arquivo para o Storage.
+	    MediaStore storageClient = new MediaStore(fileUtils.getLocalFile());
+	    try{
+	    	storageClient.execute();
+	    } catch ( IOException e){
+	    	this.haddlerError(request, response, "Erro ao enviar arquivo de vídeo para Serviço de Armazenamento.");
 	    }
+	    
+	    // Enviando arquivo para fila de conversão.
+	    VideoConverterFlow convertVideo = new VideoConverterFlow(fileUtils.getLocalFile().getName());
+	    try{
+	    	convertVideo.execute();
+	    } catch ( RuntimeException e){
+	    	System.err.println("Erro ao converter arquivo de vídeo: " + e.getMessage());
+	    	this.haddlerError(request, response, "Erro ao converter arquivo de vídeo.");
+	    }
+	    
+	    this.showVideo(request, response, fileUtils.getLocalFile().getName());
+	    
+	    storageClient.setACLVideoConverted();
+	    fileUtils.deleteLocalFile();	
+
 	    
 	    /**
 	     * Apresentar o video convertido.
 	     * <EMBED src="file.avi" loop="1" height="480" width="640" autostart="true" />
 	     */
-	    videoUtils.streamVideo(this.nomeArquivoVideo);
 	    
+	}
+	/**
+	 * Encaminha para a visualização do arquivo de vídeo convertido.
+	 */
+	private void showVideo(HttpServletRequest request, HttpServletResponse response, String filename){
+		String videoURL = ConstantsAWS.AWS_S3_PUBLIC_URL + "/" + ConstantsAWS.AWS_S3_BUCKET_ENCODED_SUBDIR + "/" + filename; 
+    	request.setAttribute("videosrc", videoURL);
+	    RequestDispatcher disp = request.getRequestDispatcher("view.jsp");
+    	try {
+			disp.forward(request, response);
+		} catch (ServletException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**

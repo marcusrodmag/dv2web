@@ -18,8 +18,7 @@ public class ProcessMedia extends EncodingCOMXMLFormatter {
 	@Override
 	public boolean isValidResponse() {
 		if(super.getResponse() != null){
-			// TODO: qual o response esperado pelo ProcessMedia?
-			return super.getResponse().contains("<response>");
+			return !super.getResponse().contains("<response><errors><error>");
 		}
 		return false;
 	}

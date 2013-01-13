@@ -6,19 +6,30 @@ import inf.marcus.dv2web.utils.business.encoder.ProcessMedia;
 
 import java.io.IOException;
 
-
-public class ConvertVideoFlow {
+/**
+ * Define o processo de conversão de vídeo.
+ * @author marcus
+ *
+ */
+public class VideoConverterFlow {
 	private String videoFileName;
-	
+	/**
+	 * Apenas para estes.
+	 */
 	public static void main(String[] args) {
-		ConvertVideoFlow convert = new ConvertVideoFlow("VID_20130112_160350_596.avi");
+		VideoConverterFlow convert = new VideoConverterFlow("VID_20130112_160350_596.avi");
 		convert.execute();
 	}
-	
-	public ConvertVideoFlow (String videoFileName){
+	/**
+	 * Defina o nome do arquivo a ser convertido e que já se econtra no Serviço de Armazenamento.
+	 * @param videoFileName
+	 */
+	public VideoConverterFlow (String videoFileName){
 		this.videoFileName = videoFileName;
 	}
-
+	/**
+	 * Fluxo de execução de conversão do vídeo.
+	 */
 	public void execute() {
 		AddMedia addMedia = new AddMedia(this.videoFileName);
 		try {
@@ -47,14 +58,7 @@ public class ConvertVideoFlow {
 		}
 		new MonitoringVideoConverterFlow(addMedia.getMediaID()).monitor();
 		
-		MediaInformation mediaInfoPosProccess = new MediaInformation(addMedia.getMediaID());
-		try {
-			mediaInfoPosProccess.execute();
-		} catch (IOException e) {
-			System.err.println("Erro mediaInfo após conversão: " + e.getMessage());
-			throw new RuntimeException("Erro ao obter informações sobre o arquivo de mídia que acaba de ser convertido.");
-		}
-		System.out.println(mediaInfoPosProccess.toString());
+		System.out.println("Fim do processo de conversão de vídeo.");
 	}
 
 }
