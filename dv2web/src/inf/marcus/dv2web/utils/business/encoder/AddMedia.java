@@ -25,9 +25,9 @@ public class AddMedia extends EncodingCOMXMLFormatter {
 		super.xmlBuild("<source>" + this.getMediaSourceURL() + "</source>");
 		super.xmlBuild("<format>");
 		super.xmlBuild("<destination>" + this.getMediaDestinationURL() + "</destination>");
-		super.xmlBuild("<output>mp4</output>");
-		super.xmlBuild("<video_codec>mpeg4</video_codec>");
-		super.xmlBuild("<audio_codec>libfaac</audio_codec>");
+		super.xmlBuild("<output>wma</output>");
+		super.xmlBuild("<video_codec>wmv2</video_codec>");
+		super.xmlBuild("<audio_codec>libmp3lame</audio_codec>");
 		super.xmlBuild("<bitrate>256k</bitrate >");
 		super.xmlBuild("</format>");
 	}
