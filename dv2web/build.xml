@@ -6,10 +6,9 @@
 	<fail unless="target-deploy-tomcat-home" message="Defina o diretório onde a aplicação será implantada."/>
 	<fail unless="package-id" message="Defina uma identificação para este pacote. Geralmente aqui usamos uma versão ou BUIL-ID (Data?)"/>
 	
-	<property name="template-dir" value="../../build-dv2web-template"/>
-	<property name="package-dir" value="../../distributables/"/>
+	<property name="template-dir" value="../../build-dv2web-template" description="Diretório usado para montar a estrutura do pacote de destribuição .war"/>
+	<property name="package-dir" value="../../distributables/" description="Diretório para armazenar os registro dos pacotes gerados e armazenados."/>
 
-	
 	<!-- ================================= 
           target: update              
          ================================= -->
@@ -47,7 +46,6 @@
     	</javac>
     </target>
 
-
 	<!-- - - - - - - - - - - - - - - - - - 
           target: checkout                      
          - - - - - - - - - - - - - - - - - -->
@@ -59,9 +57,9 @@
     		<fileset dir="WebContent"/>
     	</copy>
     	<mkdir dir="${template-dir}/WEB-INF/classes"/>
-    	
+    	<copy todir="${template-dir}/WEB-INF/classes" flatten="false" failonerror="true" includeemptydirs="false">
+    		<fileset dir="src" includes="**/*.properties"/>
+    	</copy>
     </target>
-
-
 
 </project>
