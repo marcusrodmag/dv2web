@@ -1,4 +1,4 @@
 dv2web
 ======
 
-Converter vídeos para a WEB
+Converter vídeos para formato compatível com a WEB
