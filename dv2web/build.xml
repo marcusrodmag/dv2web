@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="TutorialRelatorios" default="update">
+	<echo>Ant Version: ${ant.version}</echo>
+	
+	<fail unless="build-tomcat-home" message="Defina o diretório onde a aplicação será implantada."/>
+	<!-- ================================= 
+          target: update              
+         ================================= -->
+    <target name="update" depends="package" description="Atualiza a aplicação dv2web">
+        <echo>Atualizando a aplicação dv2web</echo>
+    </target>
+	
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: packaget                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="package" depends="checkout" description="Cria o pacote para implantação">
+        <echo>Criando pacote dv2web.war</echo>
+    </target>
+
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: checkout                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="checkout" description="Obtem o código fonte.">
+        <echo>Obtendo código fonte do SCM</echo>
+    </target>
+
+
+
+</project>
