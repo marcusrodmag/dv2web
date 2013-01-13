@@ -14,15 +14,19 @@
 	<!-- - - - - - - - - - - - - - - - - - 
           target: packaget                      
          - - - - - - - - - - - - - - - - - -->
-    <target name="package" depends="checkout" description="Cria o pacote para implantação">
+    <target name="package" depends="create-template" description="Cria o pacote para implantação">
         <echo>Criando pacote dv2web.war</echo>
     </target>
 
 	<!-- - - - - - - - - - - - - - - - - - 
           target: checkout                      
          - - - - - - - - - - - - - - - - - -->
-    <target name="checkout" description="Obtem o código fonte.">
+    <target name="create-template" description="Obtem o código fonte.">
         <echo>Obtendo código fonte do SCM</echo>
+    	<property name="template-dir" value="../build-template"/>
+		
+    	<mkdir dir="${template-dir}" />
+    	
     </target>
 
 
