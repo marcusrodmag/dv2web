@@ -11,3 +11,6 @@ ENCODING.com - Serviço de conversão dos vídeo para o formato web.
 
 Configuração de encoding para saida da conversão:
 
+Vídeo: mpeg4
+
+
