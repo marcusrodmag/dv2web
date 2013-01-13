@@ -4,15 +4,20 @@
 	<echo>Ant Version: ${ant.version}</echo>
 	
 	<fail unless="target-deploy-tomcat-home" message="Defina o diretório onde a aplicação será implantada."/>
+	<fail unless="package-id" message="Defina uma identificação para este pacote. Geralmente aqui usamos uma versão ou BUIL-ID (Data?)"/>
 	
-	<property name="template-dir" value="../../build-template"/>
+	<property name="template-dir" value="../../build-dv2web-template"/>
+	<property name="package-dir" value="../../distributables/"/>
 
 	
 	<!-- ================================= 
           target: update              
          ================================= -->
     <target name="update" depends="package" description="Atualiza a aplicação dv2web">
-        <echo>Atualizando a aplicação dv2web</echo>
+        <echo>Atualizando a aplicação dv2web.</echo>
+    	<copy file="${package-dir}/dv2web.war" todir="${target-deploy-tomcat-home}/webapps/" overwrite="true" failonerror="true"/>
+    	<echo>Aplicação atualizada com sucesso</echo>
+    	<move file="${package-dir}/dv2web.war" tofile="${package-dir}/dv2web-${package-id}.war"/>
     </target>
 	
 	<!-- - - - - - - - - - - - - - - - - - 
@@ -20,6 +25,9 @@
          - - - - - - - - - - - - - - - - - -->
     <target name="package" depends="compile" description="Cria o pacote para implantação">
         <echo>Criando pacote dv2web.war</echo>
+    	<war destfile="${package-dir}/dv2web.war" webxml="${template-dir}/WEB-INF/web.xml">
+    		<fileset dir="${template-dir}"/>
+    	</war>
     </target>
 	
 	<!-- - - - - - - - - - - - - - - - - - 
@@ -45,7 +53,7 @@
          - - - - - - - - - - - - - - - - - -->
     <target name="create-template" description="Obtem o código fonte.">
         <echo>Criando template do pacote de distribuição em: ${template-dir}</echo>
-		
+		<delete dir="${template-dir}" failonerror="false" />
     	<mkdir dir="${template-dir}" />
     	<copy todir="${template-dir}">
     		<fileset dir="WebContent"/>
