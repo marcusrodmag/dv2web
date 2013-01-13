@@ -3,7 +3,7 @@
 <project name="TutorialRelatorios" default="update">
 	<echo>Ant Version: ${ant.version}</echo>
 	
-	<fail unless="build-tomcat-home" message="Defina o diretório onde a aplicação será implantada."/>
+	<fail unless="target-deploy-tomcat-home" message="Defina o diretório onde a aplicação será implantada."/>
 	<!-- ================================= 
           target: update              
          ================================= -->
