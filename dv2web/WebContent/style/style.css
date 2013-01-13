@@ -1,0 +1,20 @@
+body {
+	background-color:white;
+}
+h1{
+	font-family:sans-serif;
+	color:red;
+	text-align:left;
+	font-size:20px;
+}
+h2{
+	font-family:sans-serif;
+	color:orange;
+	text-align:left;
+	font-size:16px;
+	margin-left: 16px;
+}
+p{
+	font-family:sans-serif;
+	font-size:18px;
+}
