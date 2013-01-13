@@ -1,8 +1,7 @@
 package inf.marcus.dv2web.utils.formatter;
 
 import inf.marcus.dv2web.utils.business.encoder.MediaConverterRequester;
-
-import java.io.IOException;
+import inf.marcus.dv2web.utils.exceptions.EncodingConversionException;
 
 public abstract class GenericRequestXMLFromatter {
 	
@@ -41,7 +40,7 @@ public abstract class GenericRequestXMLFromatter {
 	/**
 	 * Executa o request utilizando o XML contruido por esta classe utilitária.
 	 */
-	public void execute() throws IOException, RuntimeException{
+	public void execute() throws EncodingConversionException{
 		System.out.println();
 		System.out.println("Request Class >>> " + this.getClass().getName());
 		String xmlRequest = this.buildXMLRequest();
@@ -56,14 +55,14 @@ public abstract class GenericRequestXMLFromatter {
 		boolean successRequest = false;
 		while(!successRequest){
 			if(countError == maxNumberAttempts){
-				throw new RuntimeException("Número máximo de tentativas obtida enquanto tentava enviar requisição para o serviço.");
+				throw new EncodingConversionException("Número máximo de tentativas obtida enquanto tentava enviar requisição para o serviço.");
 			}
 			String response = null;
 			try {
 				response = MediaConverterRequester.executeQuery(xmlRequest);
 				this.setResponse(response);
 				successRequest = true;
-			} catch (IOException e){
+			} catch (EncodingConversionException e){
 				countError++;
 				System.err.println("Erro #"+ countError + " ao realizar request.");
 				//Aguardar antes de tentar novo request.

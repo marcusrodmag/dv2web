@@ -1,5 +1,7 @@
 package inf.marcus.dv2web.web.business;
 
+import inf.marcus.dv2web.utils.exceptions.VideoConversionException;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -21,7 +23,7 @@ public class DV2WEBFileUtils {
 	 * @param input InputStream do arquivo enviado.
 	 * @param filename Nome do arquivo que será gravado.
 	 */
-	public void storeTemporaryFile(InputStream input) throws IOException {
+	public void storeTemporaryFile(InputStream input) throws VideoConversionException {
 		int reader = 0;
 		byte[] bytes = new byte[1024];
 		System.out.println("Criando arquivo temporário de vídeo: " + localVideoFile.getAbsolutePath());
@@ -36,7 +38,10 @@ public class DV2WEBFileUtils {
 			output.close();
 		} catch (FileNotFoundException e) {
 			System.err.println("Destino do arquivo não está correto: " + localVideoFile.getAbsolutePath());
-			throw new RuntimeException("O local de gravação não foi encontrador: " + e.getMessage());
+			throw new VideoConversionException("O local de gravação não foi encontrador: " + e.getMessage());
+		} catch (IOException ioe) {
+			System.err.println("Erro ao manipular arquivo temporário de vídeo enviado: " + localVideoFile.getAbsolutePath());
+			throw new VideoConversionException("Erro ao manipular arquivo temporário de vídeo enviado");
 		}
 	}
 	/** Obtem o arquivo temporário usando no processo de envio de e-mail. 

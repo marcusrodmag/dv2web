@@ -1,6 +1,7 @@
 package inf.marcus.dv2web.utils.business.encoder;
 
 import inf.marcus.dv2web.utils.constants.ConstantsAWS;
+import inf.marcus.dv2web.utils.exceptions.EncodingConversionException;
 import inf.marcus.dv2web.utils.formatter.EncodingCOMXMLFormatter;
 
 public class AddMedia extends EncodingCOMXMLFormatter {
@@ -45,10 +46,10 @@ public class AddMedia extends EncodingCOMXMLFormatter {
 	 * @return Identificador único da media a ser convertida.
 	 * @param Resultado da execução da requisição.
 	 */
-	public int getMediaID() {
+	public int getMediaID() throws EncodingConversionException {
 		if(!this.isValidResponse()){
 			System.err.println(super.getResponse());
-			throw new RuntimeException("Não foi possível adicionar o arquivo de média a fila de exeução pois a requisição foi negado para Serviço de Conversão.");
+			throw new EncodingConversionException("Não foi possível adicionar o arquivo de média a fila de exeução pois a requisição foi negado para Serviço de Conversão.");
 		}
 	    int start = super.getResponse().indexOf(successResponseStartTag) + successResponseStartTag.length();
 	    int end = super.getResponse().indexOf(successResponseEndTag);
@@ -56,14 +57,10 @@ public class AddMedia extends EncodingCOMXMLFormatter {
 	}
 	
 	private String getMediaDestinationURL() {
-//		return "http://"+AmazonWSS3.AWS_S3_KEY + ":" + AmazonWSS3.AWS_S3_SECRET_ENCODED + "@" + AWS_S3_BUCKET_NAME + ".s3.amazonaws.com/" + AWS_S3_BUCKET_ENCODED_SUBDIR + "/" + filename + "?acl=public-read";
 		return "http://"+ConstantsAWS.AWS_S3_BUCKET_NAME+".s3.amazonaws.com/"+ConstantsAWS.AWS_S3_BUCKET_ENCODED_SUBDIR+ "/" +this.fileName+"?acl=public-read";
 	}
 	
 	private String getMediaSourceURL() {
-//		return "http://" + AmazonWSS3.AWS_S3_KEY + ":" + AmazonWSS3.AWS_S3_SECRET + "@" + AmazonWSS3.AWS_S3_BUCKET_NAME + ".s3.amazonaws.com/" + AmazonWSS3.AWS_S3_BUCKET_ORIGINAL_SUBDIR + "/" + filename;
-//		return "http://" + AmazonWSS3.AWS_S3_KEY + ":" + AmazonWSS3.AWS_S3_SECRET + "@" + AmazonWSS3.AWS_S3_BUCKET_NAME + ".s3.amazonaws.com/" + filename;
-//		return "http://" + AmazonWSS3.AWS_S3_KEY + ":" + AmazonWSS3.AWS_S3_SECRET_ENCODED + "@" + AmazonWSS3.AWS_S3_BUCKET_NAME + ".s3.amazonaws.com/" + filename;
 		return "http://"+ConstantsAWS.AWS_S3_BUCKET_NAME+".s3.amazonaws.com/" + ConstantsAWS.AWS_S3_BUCKET_ORIGINAL_SUBDIR + "/" + this.fileName;
 	}
 

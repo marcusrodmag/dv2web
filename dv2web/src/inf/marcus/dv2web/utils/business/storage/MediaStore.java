@@ -1,6 +1,7 @@
 package inf.marcus.dv2web.utils.business.storage;
 
 import inf.marcus.dv2web.utils.constants.ConstantsAWS;
+import inf.marcus.dv2web.utils.exceptions.VideoConversionException;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,18 +34,22 @@ public class MediaStore {
 		this.fileToUpload = fileToUpload;
 	}
 	
-	public void execute() throws IOException{
+	public void execute() throws VideoConversionException{
 		this.doConnect();
 		if(this.fileAlreadyExists()){
 			System.err.printf("O Arquivo %s já encontra-se no servidor.", this.fileToUpload.getName());
-			throw new RuntimeException("Já existe um arquivo com este nome no servidor de armazenamento");
+			throw new VideoConversionException("Já existe um arquivo com este nome no servidor de armazenamento");
 		}
 		this.upload();
 		this.setACLReadPublic();
 	}
 	
-	private void doConnect() throws IOException{
-		s3Credentials = new PropertiesCredentials(MediaStore.class.getResourceAsStream("AwsCredentials.properties"));
+	private void doConnect() throws VideoConversionException{
+		try {
+			s3Credentials = new PropertiesCredentials(MediaStore.class.getResourceAsStream("AwsCredentials.properties"));
+		} catch (IOException e) {
+			throw new VideoConversionException("Não foi possível obter as informações de conexão com a AWS");
+		}
 		s3Client = new AmazonS3Client(s3Credentials);
 		s3Client.setEndpoint(ConstantsAWS.AWS_S3_URL);
 	}
@@ -59,7 +64,7 @@ public class MediaStore {
 		return false;
 	}
 	
-	private void upload() throws IOException{
+	private void upload() throws VideoConversionException{
 		System.out.print("Enviando arquivo para o storage: " + this.fileToUpload.getName());
 		s3Client.putObject(ConstantsAWS.AWS_S3_BUCKET_NAME, ConstantsAWS.AWS_S3_BUCKET_ORIGINAL_SUBDIR + "/" + fileToUpload.getName(), this.fileToUpload);
 		System.out.println(" [Sucesso]");
@@ -93,7 +98,7 @@ public class MediaStore {
 		}
 		try {
 			new MediaStore(tempFile).execute();
-		} catch (IOException e) {
+		} catch (VideoConversionException e) {
 			e.printStackTrace();
 			System.exit(1);
 		}

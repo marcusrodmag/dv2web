@@ -1,8 +1,7 @@
 package inf.marcus.dv2web.utils.business.flow;
 
 import inf.marcus.dv2web.utils.business.encoder.GetStatus;
-
-import java.io.IOException;
+import inf.marcus.dv2web.utils.exceptions.EncodingConversionException;
 
 public class MonitoringVideoConverterFlow {
 	private int mediaID;
@@ -10,7 +9,7 @@ public class MonitoringVideoConverterFlow {
 		this.mediaID = mediaID;
 	}
 	
-	public void monitor(){
+	public void monitor() throws EncodingConversionException{
 		int errorCount = 0;
 		int maxErrorAccepted = 10;
 		boolean videoConverted = false;
@@ -19,7 +18,7 @@ public class MonitoringVideoConverterFlow {
 			GetStatus getStatus = new GetStatus(mediaID);
 			try {
 				getStatus.execute();
-			} catch (IOException e1) {
+			} catch (EncodingConversionException e1) {
 				errorCount++;
 				System.err.println("Erro #" + errorCount + " ao requisitar status da conversão do arquivo de vídeo\n" + e1.getMessage());
 				continue;
@@ -35,10 +34,10 @@ public class MonitoringVideoConverterFlow {
 				System.out.println("Vídeo convertido.");
 			}
 			if(status.equals("Error")){
-				throw new RuntimeException("Não foi possível converter o vídeo.");
+				throw new EncodingConversionException("Não foi possível converter o vídeo.");
 			}
 			if(errorCount == maxErrorAccepted){
-				throw new RuntimeException("Número de erros limite exedido ao tentar obter informações sobre conversão de arquivo de média. \nVerifique conexão com o servido.");
+				throw new EncodingConversionException("Número de erros limite exedido ao tentar obter informações sobre conversão de arquivo de média. \nVerifique conexão com o servido.");
 			}
 			try {
 				Thread.sleep(1000);

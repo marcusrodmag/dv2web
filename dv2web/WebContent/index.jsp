@@ -3,6 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<link rel="stylesheet" type="text/css" href="style/style.css">
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>DV 2 WEB - Converta seu vídeo para a WEB</title>
 </head>
@@ -11,9 +12,20 @@
 	<img alt="DV2WEB" src="style/img/logo.png">
 	</p>
 	<p>
-		<h1>
-			${errormsg}
-		</h1>
+			<% 
+			if (request.getAttribute("errormsg") != null) { 
+			%>
+			<h1>${errormsg}</h1>
+			<%
+				if(request.getAttribute("errordesc") != null){
+				%>
+				<h2>${errordesc}</h2>
+				<%
+				
+				}
+			}
+			 %>
+
 	</p>
 	<!-- form method=POST action="Controller" enctype="multipart/form-data"-->
 	<form action="Controller" method="post" enctype="multipart/form-data">

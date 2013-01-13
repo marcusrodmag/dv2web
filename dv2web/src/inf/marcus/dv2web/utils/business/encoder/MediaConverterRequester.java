@@ -1,5 +1,7 @@
 package inf.marcus.dv2web.utils.business.encoder;
 
+import inf.marcus.dv2web.utils.exceptions.EncodingConversionException;
+import inf.marcus.dv2web.utils.exceptions.VideoConversionException;
 import inf.marcus.dv2web.utils.formatter.EncodingCOMXMLFormatter;
 
 import java.io.BufferedWriter;
@@ -21,9 +23,9 @@ public class MediaConverterRequester {
 	 * @param requestURL Endereço para request.
 	 * @param xml o XML com a query
 	 * @return Resultado da execução do request.
-	 * @throws IOException caso ocorra algum problema na transação entre os servidores de arquivo e conversão.
+	 * @throws VideoConversionException caso ocorra algum problema na transação entre os servidores de arquivo e conversão.
 	 */
-	public static String executeQuery(String xml) throws IOException {
+	public static String executeQuery(String xml) throws EncodingConversionException {
 		System.out.println();
 		System.out.println("====================================================");
 		URL encoderURL;
@@ -45,29 +47,31 @@ public class MediaConverterRequester {
 		System.out.println("REQUEST >>");
 		System.out.println(xml);
 		System.out.println();
-		
-		HttpURLConnection urlConnection = (HttpURLConnection) encoderURL.openConnection();
-		urlConnection.setRequestMethod("POST");
-		urlConnection.setDoOutput(true);
-		urlConnection.setConnectTimeout(60000);
-		urlConnection.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
-		BufferedWriter out = new BufferedWriter(new OutputStreamWriter(urlConnection.getOutputStream()));
-		out.write(sRequest);
-		out.flush();
-		out.close();
-		urlConnection.connect();
-		InputStream is = urlConnection.getInputStream();
-		
-		System.out.println("TRANSACTION: " + urlConnection.getResponseCode() + " ["+urlConnection.getResponseMessage()+"]");
-		
-		strbuf = new StringBuffer();
-		byte[] buffer = new byte[1024 * 4];
-
-		int n = 0;
-		while ((n = is.read(buffer)) != -1) {
-			strbuf.append(new String(buffer, 0, n));
+		try{
+			HttpURLConnection urlConnection = (HttpURLConnection) encoderURL.openConnection();
+			urlConnection.setRequestMethod("POST");
+			urlConnection.setDoOutput(true);
+			urlConnection.setConnectTimeout(60000);
+			urlConnection.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
+			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(urlConnection.getOutputStream()));
+			out.write(sRequest);
+			out.flush();
+			out.close();
+			urlConnection.connect();
+			InputStream is = urlConnection.getInputStream();
+			System.out.println("TRANSACTION: " + urlConnection.getResponseCode() + " ["+urlConnection.getResponseMessage()+"]");
+			
+			strbuf = new StringBuffer();
+			byte[] buffer = new byte[1024 * 4];
+			
+			int n = 0;
+			while ((n = is.read(buffer)) != -1) {
+				strbuf.append(new String(buffer, 0, n));
+			}
+			is.close();
+		} catch (IOException e){
+			throw new EncodingConversionException("Erro ao solicitar informações ao servidor de conversão de vídeo: \n", e);
 		}
-		is.close();
 		System.out.println();
 		System.out.println("RESPONSE >>");
 		System.out.println(strbuf.toString());

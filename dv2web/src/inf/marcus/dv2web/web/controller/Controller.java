@@ -2,9 +2,10 @@ package inf.marcus.dv2web.web.controller;
 import inf.marcus.dv2web.utils.business.flow.VideoConverterFlow;
 import inf.marcus.dv2web.utils.business.storage.MediaStore;
 import inf.marcus.dv2web.utils.constants.ConstantsAWS;
+import inf.marcus.dv2web.utils.exceptions.EncodingConversionException;
+import inf.marcus.dv2web.utils.exceptions.VideoConversionException;
 import inf.marcus.dv2web.web.business.DV2WEBFileUtils;
 
-import java.io.File;
 import java.io.IOException;
 
 import javax.servlet.RequestDispatcher;
@@ -18,8 +19,8 @@ import javax.servlet.http.Part;
 @MultipartConfig
 public class Controller extends HttpServlet {
 	
+	private static final long serialVersionUID = 5L;
 	private String sendFileName;
-	private String errorMessage;
   
 	/**
 	 * Referência para upload de arquivos:
@@ -35,44 +36,40 @@ public class Controller extends HttpServlet {
 	    
 	    //Processando arquivo
 	    if(this.sendFileName == null || this.sendFileName.equals("")){
-	    	this.haddlerError(request, response, "Você deve especificar um arquivo a ser convertido");
+	    	this.handlerError(request, response, "Você deve especificar um arquivo a ser convertido");
 	    	return;
 	    }
 	    DV2WEBFileUtils fileUtils = new DV2WEBFileUtils(this.sendFileName);
 	    try{
 	    	fileUtils.storeTemporaryFile(filePart.getInputStream());
-	    } catch ( IOException e){
-	    	this.haddlerError(request, response, "Ocorreu um erro ao gravar o arquivo no servidor da aplicação.");
+	    } catch ( VideoConversionException e){
+	    	this.handlerError(request, response, "Ocorreu um erro ao gravar o arquivo no servidor da aplicação.");
+	    	return;
 	    }
 	    
 	    // Enviando arquivo para o Storage.
 	    MediaStore storageClient = new MediaStore(fileUtils.getLocalFile());
 	    try{
 	    	storageClient.execute();
-	    } catch ( IOException e){
-	    	this.haddlerError(request, response, "Erro ao enviar arquivo de vídeo para Serviço de Armazenamento.");
+	    } catch ( VideoConversionException e){
+	    	this.handlerError(request, response, "Erro ao enviar arquivo de vídeo para Serviço de Armazenamento.", e.getMessage());
+	    	return;
 	    }
 	    
 	    // Enviando arquivo para fila de conversão.
 	    VideoConverterFlow convertVideo = new VideoConverterFlow(fileUtils.getLocalFile().getName());
 	    try{
 	    	convertVideo.execute();
-	    } catch ( RuntimeException e){
+	    } catch ( EncodingConversionException e){
 	    	System.err.println("Erro ao converter arquivo de vídeo: " + e.getMessage());
-	    	this.haddlerError(request, response, "Erro ao converter arquivo de vídeo.");
+	    	this.handlerError(request, response, "Erro ao converter arquivo de vídeo.", e.getMessage());
+	    	return;
 	    }
-	    
-	    this.showVideo(request, response, fileUtils.getLocalFile().getName());
 	    
 	    storageClient.setACLVideoConverted();
 	    fileUtils.deleteLocalFile();	
-
 	    
-	    /**
-	     * Apresentar o video convertido.
-	     * <EMBED src="file.avi" loop="1" height="480" width="640" autostart="true" />
-	     */
-	    
+	    this.showVideo(request, response, fileUtils.getLocalFile().getName());
 	}
 	/**
 	 * Encaminha para a visualização do arquivo de vídeo convertido.
@@ -91,7 +88,7 @@ public class Controller extends HttpServlet {
 	}
 	
 	/**
-	 * Obtem o nome do arquivo através do cabeçalho da requisição: API V3.0
+	 * Obtem o nome do arquivo através do cabeçalho da requisição: SERVLET API V3.0
 	 * @param part Objeto contendo o cabeçalho da requisição.
 	 * @return O nome do Arquivo.
 	 */
@@ -104,9 +101,18 @@ public class Controller extends HttpServlet {
 	    }
 	    return null;
 	}
-	
-	private void haddlerError (HttpServletRequest request, HttpServletResponse response, String msg){
+	/**
+	 * Informa mensagem de erro e os detalhes do erro.
+	 * @param request
+	 * @param response
+	 * @param msg Mensagem de erro.
+	 * @param errorDescription Detalhes do erro.
+	 */
+	private void handlerError (HttpServletRequest request, HttpServletResponse response, String msg, String errorDescription){
     	request.setAttribute("errormsg", msg);
+    	if(errorDescription != null){
+    		request.setAttribute("errordesc", errorDescription);
+    	}
 	    RequestDispatcher disp = request.getRequestDispatcher("index.jsp");
     	try {
 			disp.forward(request, response);
@@ -115,5 +121,14 @@ public class Controller extends HttpServlet {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	/**
+	 * Informa erro de execução porém sem detalhes.
+	 * @param request
+	 * @param response
+	 * @param msg Mensagem de erro.
+	 */
+	private void handlerError (HttpServletRequest request, HttpServletResponse response, String msg){
+		this.handlerError(request, response, msg, null);
 	}
 }
