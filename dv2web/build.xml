@@ -21,7 +21,7 @@
     </target>
 	
 	<!-- - - - - - - - - - - - - - - - - - 
-          target: packaget                      
+          target: package                 
          - - - - - - - - - - - - - - - - - -->
     <target name="package" depends="compile" description="Cria o pacote para implantação">
         <echo>Criando pacote dv2web.war</echo>
