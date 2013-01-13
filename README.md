@@ -8,3 +8,6 @@ Utiliza como serviços:
 AWS EC2 - Ambiente de execução desta aplicação.
 AWS S3 - Local de armazenamento para os vídeos enviados para conversão e também para os já convertidos.
 ENCODING.com - Serviço de conversão dos vídeo para o formato web.
+
+Configuração de encoding para saida da conversão:
+
