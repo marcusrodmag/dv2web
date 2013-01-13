@@ -12,15 +12,15 @@ Serviços utilizados no processo:
 
 Configuração de encoding para saida da conversão:
 
-Vídeo: mpeg4
+Formato de saída: wma
+Bitrate: 256k
+Codec de Vídeo: wmv2
+Codec de Áudio: libmp3lame
 
-Estratégias de Implantação Contínua:
+Estratégias de Deploy Contínuo:
 
 A estratégia consiste em consultar o repositório GiHub periodicamente e validar se existe alguma alteração em relação ao repositório clonado no servidor da aplicação.
 Caso exista, o repositório local será atualizado e o build de construção e implantação executado.
 
 Para permitir a atualização automatica da aplicação, as configurações do Tomcat foram alteradas conforme descrito na documentaçõ:
 http://tomcat.apache.org/tomcat-5.5-doc/config/host.html#Automatic_Application_Deployment
-
-
-
