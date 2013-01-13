@@ -4,6 +4,10 @@
 	<echo>Ant Version: ${ant.version}</echo>
 	
 	<fail unless="target-deploy-tomcat-home" message="Defina o diretório onde a aplicação será implantada."/>
+	
+	<property name="template-dir" value="../../build-template"/>
+
+	
 	<!-- ================================= 
           target: update              
          ================================= -->
@@ -14,18 +18,39 @@
 	<!-- - - - - - - - - - - - - - - - - - 
           target: packaget                      
          - - - - - - - - - - - - - - - - - -->
-    <target name="package" depends="create-template" description="Cria o pacote para implantação">
+    <target name="package" depends="compile" description="Cria o pacote para implantação">
         <echo>Criando pacote dv2web.war</echo>
     </target>
+	
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: compile                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="compile" depends="create-template">
+    	<echo>Compilando código fonte</echo>
+    	<javac srcdir="src" destdir="${template-dir}/WEB-INF/classes" encoding="ISO-8859-1" source="1.6" target="1.6">
+        	<classpath>
+                <fileset dir="${target-deploy-tomcat-home}/lib">
+                  <include name="*.jar"/>
+                </fileset>
+                <fileset dir="${template-dir}/WEB-INF/lib">
+                  <include name="*.jar"/>
+                </fileset>
+        	</classpath>
+    	</javac>
+    </target>
+
 
 	<!-- - - - - - - - - - - - - - - - - - 
           target: checkout                      
          - - - - - - - - - - - - - - - - - -->
     <target name="create-template" description="Obtem o código fonte.">
-        <echo>Obtendo código fonte do SCM</echo>
-    	<property name="template-dir" value="../build-template"/>
+        <echo>Criando template do pacote de distribuição em: ${template-dir}</echo>
 		
     	<mkdir dir="${template-dir}" />
+    	<copy todir="${template-dir}">
+    		<fileset dir="WebContent"/>
+    	</copy>
+    	<mkdir dir="${template-dir}/WEB-INF/classes"/>
     	
     </target>
 
