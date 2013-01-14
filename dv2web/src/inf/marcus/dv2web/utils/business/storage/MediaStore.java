@@ -2,10 +2,12 @@ package inf.marcus.dv2web.utils.business.storage;
 
 import inf.marcus.dv2web.utils.constants.ConstantsAWS;
 import inf.marcus.dv2web.utils.exceptions.VideoConversionException;
+import inf.marcus.dv2web.web.business.DV2WEBFileUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.TreeMap;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.util.FileCopyUtils;
@@ -34,6 +36,13 @@ public class MediaStore {
 		this.fileToUpload = fileToUpload;
 	}
 	
+	/**
+	 * Permite a utilização dos metodos internos em métodos estáticos.
+	 */
+	private MediaStore(){
+
+	}
+	
 	public void execute() throws VideoConversionException{
 		this.doConnect();
 		if(this.fileAlreadyExists()){
@@ -42,6 +51,26 @@ public class MediaStore {
 		}
 		this.upload();
 		this.setACLReadPublic();
+	}
+	/**
+	 * Retorna a lista de arquivos ja convertidos em um mapa contendo o nome do arquivo e sua URL.
+	 * @return
+	 */
+	public static TreeMap<String,String> getConvertedFiles(){
+		MediaStore media = new MediaStore();
+		TreeMap<String,String> fileList = new TreeMap<String,String>();
+		try {
+			media.doConnect();
+		} catch (VideoConversionException e) {
+			throw new RuntimeException("Erro ao conectado com servidor de armazenamento." + e.getMessage());
+		}
+		for ( S3ObjectSummary summary : S3Objects.withPrefix(media.s3Client, ConstantsAWS.AWS_S3_BUCKET_NAME, ConstantsAWS.AWS_S3_BUCKET_ENCODED_SUBDIR) ) {
+		    if(!summary.getKey().equals(ConstantsAWS.AWS_S3_BUCKET_ENCODED_SUBDIR + "/") && summary.getKey().endsWith(DV2WEBFileUtils.CONVERTED_FILE_EXTENCION)){
+		    	System.out.printf("Arquivo convertido listado: '%s'\n", summary.getKey());
+		    	fileList.put(summary.getKey().replaceFirst(ConstantsAWS.AWS_S3_BUCKET_ENCODED_SUBDIR + "/", ""),ConstantsAWS.AWS_S3_PUBLIC_URL + "/" + ConstantsAWS.AWS_S3_BUCKET_NAME + "/" + ConstantsAWS.AWS_S3_BUCKET_ENCODED_SUBDIR + "/" + summary.getKey());
+		    }
+		}
+		return fileList;
 	}
 	
 	private void doConnect() throws VideoConversionException{

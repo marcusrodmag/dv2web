@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class DV2WEBFileUtils {
+	public static final String CONVERTED_FILE_EXTENCION = "mp4";
 	private File localVideoFile;
 	/** Diretório temporário para receber o arquivo de vídeo e depois envia-lo para o Storage. */
 	private static final String TEMP_APPSERVER_REPOSITORY_DIR = System.getProperty("java.io.tmpdir");
@@ -61,14 +62,13 @@ public class DV2WEBFileUtils {
 	public String getConvertedFileName(){
 		String filename = this.getLocalFile().getName();
 		String filenameWithoutExt;
-		String destinationExtension = "mp4";
 		String destinationFilename = null;
 		String[] tempGetExtension = filename.split("\\.");
 		if(tempGetExtension.length == 2){
 			filenameWithoutExt = tempGetExtension[0];
-			destinationFilename = filenameWithoutExt + "." + destinationExtension;
+			destinationFilename = filenameWithoutExt + "." + DV2WEBFileUtils.CONVERTED_FILE_EXTENCION;
 		} else {
-			destinationFilename = filename + "." + destinationExtension;
+			destinationFilename = filename + "." + DV2WEBFileUtils.CONVERTED_FILE_EXTENCION;
 		}
 		return destinationFilename;
 	}

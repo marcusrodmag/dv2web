@@ -9,34 +9,50 @@
 <title>DV 2 WEB - Converta seu vídeo para a WEB</title>
 </head>
 <body>
-	<p>
-	<img alt="DV2WEB" src="style/img/logo.png">
-	</p>
-	<p>
-			<% 
+<table class="center">
+	<tr>
+		<td>
+			<p>
+				<img alt="DV2WEB" src="style/img/logo.png"/>
+			</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<%
 			if (request.getAttribute("errormsg") != null) { 
 			%>
 			<h1>${errormsg}</h1>
-			<%
+				<%
 				if(request.getAttribute("errordesc") != null){
 				%>
 				<h2>${errordesc}</h2>
 				<%
-				
 				}
 			}
 			 %>
-
-	</p>
-	<!-- form method=POST action="Controller" enctype="multipart/form-data"-->
-	<form action="Controller" method="post" enctype="multipart/form-data">
-		<p>
-			Informe o arquivo de vídeo a ser convertido:</br>
-			<input type="file" name="videofile" size="20">
-		</p>
-		<p>
-			<input type="submit" value="Converter">
-		</p>
-	</form>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<form action="Controller" method="post" enctype="multipart/form-data">
+				<p>
+					Informe o arquivo de vídeo a ser convertido:<br/>
+					<input type="file" name="videofile" size="20"/>
+				</p>
+				<p>
+					<input type="submit" value="Converter"/>
+				</p>
+			</form>
+		</td>
+	</tr>
+	<tr>
+		<td align="right">
+			<img alt="Vídeos Convertidos" src="style/img/list.jpg">
+			<a href="Controller?list=converted">Lista de vídeos já convertidos</a>
+		</td>
+	</tr>
+</table>
+	
 </body>
 </html>

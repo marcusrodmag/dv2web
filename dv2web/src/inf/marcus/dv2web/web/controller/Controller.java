@@ -7,6 +7,7 @@ import inf.marcus.dv2web.utils.exceptions.VideoConversionException;
 import inf.marcus.dv2web.web.business.DV2WEBFileUtils;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -71,6 +72,31 @@ public class Controller extends HttpServlet {
 	    
 	    this.showVideo(request, response, fileUtils.getConvertedFileName());
 	}
+	@Override
+	public void doGet(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {       
+		String argumentList = request.getParameter("list");
+		String argumentView = request.getParameter("view");
+		if(argumentList != null){
+			if(argumentList.equals("converted")){
+				Map<String,String> convertedFileList = MediaStore.getConvertedFiles();
+				request.setAttribute("convertedvideos", convertedFileList);
+				RequestDispatcher disp = request.getRequestDispatcher("list.jsp");
+				try {
+					disp.forward(request, response);
+				} catch (ServletException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} else {
+				this.handlerError(request, response, "Endereço ou filtro inválido");
+				return;
+			}
+		} else if(argumentView != null){
+			this.showVideo(request, response, argumentView);
+		}
+	}
+	
 	/**
 	 * Encaminha para a visualização do arquivo de vídeo convertido.
 	 */
@@ -122,6 +148,7 @@ public class Controller extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
+	
 	/**
 	 * Informa erro de execução porém sem detalhes.
 	 * @param request

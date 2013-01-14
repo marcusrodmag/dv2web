@@ -8,11 +8,22 @@
 <title>DV 2 WEB - Reprodução de Vídeo</title>
 </head>
 <body>
-	<p>
-		<img alt="DV2WEB" src="style/img/logo.png">
-	</p>
-	<p>Exibição de seu vídeo convertido para o Padrão WEB</p>
-	<object id="NSPlay" width="250" height="200"
+<table class="center">
+	<tr>
+		<td>
+			<p>
+				<img alt="DV2WEB" src="style/img/logo.png"/>
+			</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<h3>Exibição de seu vídeo convertido para o Padrão WEB</h3>
+		</td>
+	</tr>
+	<tr>
+		<td>
+		<object id="NSPlay" width="250" height="200"
 		classid="CLSID:22d6f312-b0f6-11d0-94ab-0080c74c7e95"
 		codebase="http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=5,1,52,701">
 		<param name="AudioStream" value="-1">
@@ -83,8 +94,17 @@
 			transparentatstart="0" allowchangedisplaysize="0" allowscan="0"
 			enablecontextmenu="0" clicktoplay="0" width="640" height="480"></embed>
 	</object>
-	<p>
-		<a href="index.jsp">Enviar outro arquivo</a>
-	</p>
+		</td>
+	</tr>
+	<tr>
+		<td align="left">
+			Opções
+			<ul>
+				<li><a href="index.jsp">Converter um vídeo</a></li>
+				<li><a href="Controller?list=converted">Listar vídeos convertidos</a></li>
+			</ul>
+		</td>
+	</tr>
+</table>
 </body>
 </html>
