@@ -26,9 +26,9 @@ public class AddMedia extends EncodingCOMXMLFormatter {
 		super.xmlBuild("<source>" + this.getMediaSourceURL() + "</source>");
 		super.xmlBuild("<format>");
 		super.xmlBuild("<destination>" + this.getMediaDestinationURL() + "</destination>");
-		super.xmlBuild("<output>wmv</output>");
-		super.xmlBuild("<video_codec>wmv2</video_codec>");
-		super.xmlBuild("<audio_codec>wmav2</audio_codec>");
+		super.xmlBuild("<output>mp4</output>");
+		super.xmlBuild("<video_codec>mpeg4</video_codec>");
+		super.xmlBuild("<audio_codec>libfaac</audio_codec>");
 		super.xmlBuild("<bitrate>256k</bitrate >");
 		super.xmlBuild("</format>");
 	}
@@ -50,7 +50,7 @@ public class AddMedia extends EncodingCOMXMLFormatter {
 	public int getMediaID() throws EncodingConversionException {
 		if(!this.isValidResponse()){
 			System.err.println(super.getResponse());
-			throw new EncodingConversionException("Não foi possível adicionar o arquivo de média a fila de exeução pois a requisição foi negado para Serviço de Conversão.");
+			throw new EncodingConversionException("Não foi possível adicionar o arquivo de mídia à fila de exeução pois a requisição foi negada pelo Serviço de Conversão.");
 		}
 	    int start = super.getResponse().indexOf(successResponseStartTag) + successResponseStartTag.length();
 	    int end = super.getResponse().indexOf(successResponseEndTag);
