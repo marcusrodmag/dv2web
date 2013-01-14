@@ -14,7 +14,8 @@
 	<p>
 		Exibição de seu vídeo convertido para o Padrão WEB
 	</p>
-	<EMBED src="${videosrc}" loop="1" width="640" height="480" autostart="true" />
+	<embed src="${videosrc}" width="640" height="480">
+	</video>
 		<p>
 		<a href="index.jsp">Enviar outro arquivo</a>
 		</p>

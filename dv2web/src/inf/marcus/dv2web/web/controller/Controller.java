@@ -69,7 +69,7 @@ public class Controller extends HttpServlet {
 	    storageClient.setACLVideoConverted();
 	    fileUtils.deleteLocalFile();	
 	    
-	    this.showVideo(request, response, fileUtils.getLocalFile().getName());
+	    this.showVideo(request, response, fileUtils.getConvertedFileName());
 	}
 	/**
 	 * Encaminha para a visualização do arquivo de vídeo convertido.

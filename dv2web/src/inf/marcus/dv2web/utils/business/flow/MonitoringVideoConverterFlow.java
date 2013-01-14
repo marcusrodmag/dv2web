@@ -15,6 +15,9 @@ public class MonitoringVideoConverterFlow {
 		boolean videoConverted = false;
 		System.out.println("Aguardando processamento arquivo #" + this.mediaID);
 		while (!videoConverted) {
+			if(errorCount == maxErrorAccepted){
+				throw new EncodingConversionException("O número máximo de tentativas para resolver um problem no servidor de conversão foi atingido.");
+			}
 			GetStatus getStatus = new GetStatus(mediaID);
 			try {
 				getStatus.execute();

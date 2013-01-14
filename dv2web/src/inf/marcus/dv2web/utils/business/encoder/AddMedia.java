@@ -3,6 +3,7 @@ package inf.marcus.dv2web.utils.business.encoder;
 import inf.marcus.dv2web.utils.constants.ConstantsAWS;
 import inf.marcus.dv2web.utils.exceptions.EncodingConversionException;
 import inf.marcus.dv2web.utils.formatter.EncodingCOMXMLFormatter;
+import inf.marcus.dv2web.web.business.DV2WEBFileUtils;
 
 public class AddMedia extends EncodingCOMXMLFormatter {
 	
@@ -25,9 +26,9 @@ public class AddMedia extends EncodingCOMXMLFormatter {
 		super.xmlBuild("<source>" + this.getMediaSourceURL() + "</source>");
 		super.xmlBuild("<format>");
 		super.xmlBuild("<destination>" + this.getMediaDestinationURL() + "</destination>");
-		super.xmlBuild("<output>wma</output>");
+		super.xmlBuild("<output>wmv</output>");
 		super.xmlBuild("<video_codec>wmv2</video_codec>");
-		super.xmlBuild("<audio_codec>libmp3lame</audio_codec>");
+		super.xmlBuild("<audio_codec>wmav2</audio_codec>");
 		super.xmlBuild("<bitrate>256k</bitrate >");
 		super.xmlBuild("</format>");
 	}
@@ -57,7 +58,7 @@ public class AddMedia extends EncodingCOMXMLFormatter {
 	}
 	
 	private String getMediaDestinationURL() {
-		return "http://"+ConstantsAWS.AWS_S3_BUCKET_NAME+".s3.amazonaws.com/"+ConstantsAWS.AWS_S3_BUCKET_ENCODED_SUBDIR+ "/" +this.fileName+"?acl=public-read";
+		return "http://"+ConstantsAWS.AWS_S3_BUCKET_NAME+".s3.amazonaws.com/"+ConstantsAWS.AWS_S3_BUCKET_ENCODED_SUBDIR+ "/" +new DV2WEBFileUtils(fileName).getConvertedFileName()+"?acl=public-read";
 	}
 	
 	private String getMediaSourceURL() {

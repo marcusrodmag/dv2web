@@ -57,5 +57,20 @@ public class DV2WEBFileUtils {
 		System.out.println("Excluindo arquivo de vídeo temporário");
 		this.localVideoFile.delete();
 	}
+	
+	public String getConvertedFileName(){
+		String filename = this.getLocalFile().getName();
+		String filenameWithoutExt;
+		String destinationExtension = "mp4";
+		String destinationFilename = null;
+		String[] tempGetExtension = filename.split("\\.");
+		if(tempGetExtension.length == 2){
+			filenameWithoutExt = tempGetExtension[0];
+			destinationFilename = filenameWithoutExt + "." + destinationExtension;
+		} else {
+			destinationFilename = filename + "." + destinationExtension;
+		}
+		return destinationFilename;
+	}
 
 }
